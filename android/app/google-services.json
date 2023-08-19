@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "473211505919",
+    "project_id": "ulab-bus-tracker-5c860",
+    "storage_bucket": "ulab-bus-tracker-5c860.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473211505919:android:3532c98f4742a2b40e90ca",
+        "android_client_info": {
+          "package_name": "company.mac.demo8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473211505919-i54ksgnpvko6dll2oj2731u7upf61bdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6fMOIElr1HkOvQ0Asi8J-VyXlO05eAhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473211505919-i54ksgnpvko6dll2oj2731u7upf61bdd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
