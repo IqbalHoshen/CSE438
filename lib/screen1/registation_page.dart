@@ -1,7 +1,10 @@
+import 'package:demo8/fierB/fier_base.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:demo8/screen1/run_main_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegistarPage extends StatefulWidget {
   const RegistarPage({super.key});
@@ -12,12 +15,44 @@ class RegistarPage extends StatefulWidget {
 
 class _RegistarPageState extends State<RegistarPage> {
   final nameTextEditingController = TextEditingController();
-  final idTextEditingController = TextEditingController();
+  final sidTextEditingController = TextEditingController();
   final emailEditingController = TextEditingController();
   final passwordTextEditingController = TextEditingController();
+  final confirmTextEditingController = TextEditingController();
   bool _passwordVisible = false;
 
   final _formkey = GlobalKey<FormState>();
+
+  void _submit() async {
+    if (_formkey.currentState!.validate()) {
+      await firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: emailEditingController.text.trim(),
+              password: passwordTextEditingController.text.trim())
+          .then((auth) async {
+        currentUser = auth.user;
+        if (currentUser != null) {
+          Map userMap = {
+            "id": currentUser!.uid,
+            "name": nameTextEditingController.text.trim(),
+            "sid": sidTextEditingController.text.trim(),
+            "email": emailEditingController.text.trim(),
+          };
+          DatabaseReference userRef =
+              FirebaseDatabase.instance.ref().child("demo8");
+          userRef.child(currentUser!.uid).set(userMap);
+        }
+        await Fluttertoast.showToast(msg: "Successfully Registered");
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => MainScreen()));
+      }).catchError((errorMessage) {
+        Fluttertoast.showToast(msg: "Error occured: \n $errorMessage");
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Not all field are valid");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkTheme =
@@ -55,6 +90,7 @@ class _RegistarPageState extends State<RegistarPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Form(
+                        key: _formkey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,7 +163,7 @@ class _RegistarPageState extends State<RegistarPage> {
                                 }
                               },
                               onChanged: (text) => setState(() {
-                                idTextEditingController.text = text;
+                                sidTextEditingController.text = text;
                               }),
                             ),
                             SizedBox(
@@ -226,6 +262,63 @@ class _RegistarPageState extends State<RegistarPage> {
                             SizedBox(
                               height: 10,
                             ),
+                            TextFormField(
+                              obscureText: !_passwordVisible,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(15)
+                              ],
+                              decoration: InputDecoration(
+                                  hintText: "Confirm Password",
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  filled: true,
+                                  fillColor: darkTheme
+                                      ? Colors.black45
+                                      : Colors.grey.shade200,
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      )),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: darkTheme
+                                          ? Colors.orange.shade300
+                                          : Colors.orange,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      });
+                                    },
+                                  )),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return 'Confirm password can\'t be empty';
+                                }
+                                if (text !=
+                                    passwordTextEditingController.text) {
+                                  return "Password do not match";
+                                }
+                                if (text.length > 14) {
+                                  return "password can\'t be more than 15 ";
+                                }
+                                return null;
+                              },
+                              onChanged: (text) => setState(() {
+                                confirmTextEditingController.text = text;
+                              }),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   primary: darkTheme
@@ -239,7 +332,9 @@ class _RegistarPageState extends State<RegistarPage> {
                                   ),
                                   minimumSize: Size(double.infinity, 50),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  _submit();
+                                },
                                 child: Text(
                                   'Register',
                                   style: TextStyle(
@@ -259,6 +354,36 @@ class _RegistarPageState extends State<RegistarPage> {
                                       : Colors.black38,
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Have an account?",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: darkTheme
+                                          ? Colors.amber.shade400
+                                          : Colors.blue,
+                                    ),
+                                  ),
+                                )
+                              ],
                             )
                           ],
                         ),
