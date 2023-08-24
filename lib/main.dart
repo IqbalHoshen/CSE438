@@ -1,29 +1,37 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:demo8/screen1/run_main_page.dart';
-import 'package:demo8/screen1/registation_page.dart';
-import 'package:demo8/Theme/theme_pro.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './files/signup.dart';
+import './files/driver-home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> main() async {
-  runApp(const MyApp());
+late FirebaseApp app;
+late FirebaseAuth auth;
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  app = await Firebase.initializeApp();
+  auth = FirebaseAuth.instanceFor(app: app);
+
+  //await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      themeMode: ThemeMode.system,
-      theme: Mytheme.lightTheme,
-      darkTheme: Mytheme.darkTheme,
-      debugShowCheckedModeBanner: false,
-      home: RegistarPage(),
-    );
+        theme: ThemeData(),
+        debugShowCheckedModeBanner: false,
+        title: 'Base',
+        // home: Home(),
+        initialRoute: './',
+        routes: {
+          '/': (context) => signup(),
+          //'/home':(context) =>Home(),
+          '/driver-home': (context) => BusTrackingScreen()
+        });
   }
 }

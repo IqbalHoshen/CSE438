@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "473211505919",
-    "project_id": "ulab-bus-tracker-5c860",
-    "storage_bucket": "ulab-bus-tracker-5c860.appspot.com"
+    "project_number": "176080339440",
+    "project_id": "navigation-9f0be",
+    "storage_bucket": "navigation-9f0be.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:473211505919:android:3532c98f4742a2b40e90ca",
+        "mobilesdk_app_id": "1:176080339440:android:11282096bc4dd962f75d35",
         "android_client_info": {
-          "package_name": "company.mac.demo8"
+          "package_name": "com.example.ulab_shuttle_bustracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "473211505919-i54ksgnpvko6dll2oj2731u7upf61bdd.apps.googleusercontent.com",
+          "client_id": "176080339440-5hktf2bkvb3535ab43d4n7q0vdrfkqdm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC6fMOIElr1HkOvQ0Asi8J-VyXlO05eAhg"
+          "current_key": "AIzaSyBHZS3nQ1Bt8MQLhDiaq1PKgzjaCaDGqqo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "473211505919-i54ksgnpvko6dll2oj2731u7upf61bdd.apps.googleusercontent.com",
+              "client_id": "176080339440-5hktf2bkvb3535ab43d4n7q0vdrfkqdm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
