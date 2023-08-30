@@ -47,6 +47,7 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_database: ^10.2.4
   email_validator: ^2.1.17
+  google_map_polyline_new: ^0.3.0+2
 
 
 

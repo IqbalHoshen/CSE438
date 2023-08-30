@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 Future<Marker> createDriverMarker(LatLng driverLocation) async {
   final BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
     const ImageConfiguration(devicePixelRatio: 1.0),
-    'images/111.png',
+    'images/party-bus.png',
   );
 
   Marker marker = Marker(

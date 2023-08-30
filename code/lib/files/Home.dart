@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_map_polyline_new/google_map_polyline_new.dart';
 
 class HomePage extends StatefulWidget {
   final UserCredential userCredential;
@@ -34,8 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchDriverLocations() async {
     try {
-      QuerySnapshot snapshot =
-          await _firestore.collection('DriverLocations').get();
+      QuerySnapshot snapshot = await _firestore.collection('DriverLocations').get();
 
       List<Marker> markers = [];
 
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
               position: latLng,
               icon: await BitmapDescriptor.fromAssetImage(
                 ImageConfiguration(devicePixelRatio: 1.0),
-                'images/111.png',
+                'images/party-bus.png',
               ),
               infoWindow: InfoWindow(title: "Bus $busNumber"),
             );
@@ -70,56 +70,31 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /*void sendPickupRequest(String busDriverId) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final studentId = user.email;
-        final studentLocation = await getCurrentLocation();
+  /*GoogleMapPolyline googleMapPolyline = GoogleMapPolyline(apiKey: "AIzaSyDaIIPN3Zc6oreYRDKP_HE39buyR4hrZWw");
 
-        // Send pick-up request to the bus driver
-        await FirebaseFirestore.instance
-            .collection('PickupRequests')
-            .doc(busDriverId)
-            .set({
-          'studentmail': studentId,
-          'location': GeoPoint(studentLocation.latitude, studentLocation.longitude),
-        });
+  List<LatLng> polylineCoordinates = [];
+  final Set<Polyline> _polylines = {};
 
-        print('Pick-up request sent to bus driver.');
-      }
-    } catch (e) {
-      print('Error sending pick-up request: $e');
-    }
-  }
+  void _fetchAndShowRoute() async {
+    polylineCoordinates = (await googleMapPolyline.getCoordinatesWithLocation(
+      origin: LatLng(23.772691, 90.360701),
+      destination: LatLng(23.764351, 90.347853),
+      mode: RouteMode.driving,
+    ))!;
 
-
-  Future<Position> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        throw Exception(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      }
-      if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied');
-      }
-    }
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.bestForNavigation,
-    );
-
-    return position; // Return the position object
+    setState(() {
+      _polylines.add(
+        Polyline(
+          polylineId: PolylineId('route'),
+          color: Colors.blue,
+          points: polylineCoordinates,
+          width: 3,
+        ),
+      );
+    });
   }*/
+
+
 
   void _centerMapToBuses() {
     if (_driverMarkers.isNotEmpty && _mapController != null) {
@@ -144,6 +119,7 @@ class _HomePageState extends State<HomePage> {
         initialCameraPosition:
             CameraPosition(target: LatLng(23.8041, 90.4152), zoom: 14),
         markers: Set<Marker>.of(_driverMarkers),
+        //polylines: _polylines, sadlly this need a paid API :')
         onMapCreated: (controller) {
           _mapController = controller;
         },
